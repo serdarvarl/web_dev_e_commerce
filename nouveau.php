@@ -10,13 +10,7 @@ if ($conn->connect_error) {
     die("connection errorr: " . $conn->connect_error);
 }
 
-// URL de id
-$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
-// de base de données
-$sql = "SELECT * FROM Articles WHERE id_art = $id LIMIT 1";
-$result = $conn->query($sql);
-$product = ($result && $result->num_rows > 0) ? $result->fetch_assoc() : null;
 
 $conn->close();
 ?>
@@ -24,8 +18,12 @@ $conn->close();
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title><?php echo $product ? htmlspecialchars($product['nom']) : 'Produit introuvable'; ?></title>
+  <title>Nouveau client</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+   
+
+  </style>
 </head>
 <body>
 
@@ -56,11 +54,17 @@ $conn->close();
 
 <!--enregister client page -->
 
-<h1 id="client_page">Formulaire Nouveau Client</h1>
 
 
 
-<form action="enregistrement.php" method="get">
+
+<div class="client_page">
+<h1>Formulaire Nouveau Client</h1>
+  <p>Veuillez remplir le formulaire ci-dessous pour créer un nouveau compte client.</p>
+
+  <!-- Formulaire d'inscription -->
+
+<form action="enregistrement.php" method="post"> /* utiliser post pour exo 2 de TD4 */
     <label>Nom :</label>
     <input type="text" name="n" required><br><br>
 
@@ -87,6 +91,7 @@ $conn->close();
 
 
 
+</div>
 
 
 

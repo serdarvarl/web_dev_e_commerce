@@ -36,8 +36,7 @@ $conn->close();
         <div class="container_header">
             <div id="top_menu">
                 <ul>
-                    <li><a href="index.html">Miel</a></li>
-                    <li><a href="propolis.html">Propolis</a></li>
+                    <li><a href="index.php">Miel</a></li>
                     <li><a href="blog.html">Blog</a></li>
                     <li><a href="about.html">About</a></li>
                     <li><a href="contact.html">Contact</a></li>
@@ -46,7 +45,7 @@ $conn->close();
 
             </div>
             <div class="logo">
-                <a href="index.html">
+                <a href="index.php">
                     <img src="images/logo.png" alt="logo">
 
                 </a>
@@ -58,6 +57,64 @@ $conn->close();
 
         </div>
     </header>
+
+
+
+
+<!--Dynamic Product List from Database -->
+    <div id="product-list-container">
+    <?php
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            echo '<div class="product-item">';
+            echo '<a href="article.php?id='.$row['id_art'].'">';
+            echo '<h2 class="product_name">'.htmlspecialchars($row['nom']).'</h2>';
+            echo '<img src="'.htmlspecialchars($row['url_photo']).'" alt="'.htmlspecialchars($row['nom']).'">';
+            echo '</a>';
+            echo '<p class="product_description">'.htmlspecialchars($row['description']).'</p>';
+            echo '<p class="product_price">Prix: '.htmlspecialchars($row['prix']).' €</p>';
+            echo '<button class="add-to-cart">Ajouter au panier</button>';
+            echo '</div>';
+        }
+    } else {
+        echo "<p>Aucun produit trouvé.</p>";
+    }
+    ?>
+</div>
+
+
+
+
+
+
+    <!-- Footer  pas encore fini --> 
+    <div class="footer">
+        <p>&copy; 2024 Miel. All rights reserved.</p>
+        <div class="bottom_menu">
+            <ul>
+                <li><a href="index.html">Miel</a></li> 
+                <li>Propolis</li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="propolis.html">Propolis</a></li>
+                <li><a href="blog.php">Blog</a></li>
+            </ul>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!--  Static Product List Example 
     <div id="product-list-container">
 
@@ -174,46 +231,9 @@ $conn->close();
     </div>
  -->
 
-<!--Dynamic Product List from Database -->
-    <div id="product-list-container">
-    <?php
-    if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-            echo '<div class="product-item">';
-            echo '<a href="article.php?id='.$row['id_art'].'">';
-            echo '<h2 class="product_name">'.htmlspecialchars($row['nom']).'</h2>';
-            echo '<img src="'.htmlspecialchars($row['url_photo']).'" alt="'.htmlspecialchars($row['nom']).'">';
-            echo '</a>';
-            echo '<p class="product_description">'.htmlspecialchars($row['description']).'</p>';
-            echo '<p class="product_price">Prix: '.htmlspecialchars($row['prix']).' €</p>';
-            echo '<button class="add-to-cart">Ajouter au panier</button>';
-            echo '</div>';
-        }
-    } else {
-        echo "<p>Aucun produit trouvé.</p>";
-    }
-    ?>
-</div>
 
 
 
-
-
-
-    <!-- Footer  pas encore fini --> 
-    <div class="footer">
-        <p>&copy; 2024 Miel. All rights reserved.</p>
-        <div class="bottom_menu">
-            <ul>
-                <li><a href="index.html">Miel</a></li> 
-                <li>Propolis</li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="propolis.html">Propolis</a></li>
-                <li><a href="blog.html">Blog</a></li>
-            </ul>
-        </div>
-    </div>
 
 </body>
 </html>
