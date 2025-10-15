@@ -8,28 +8,32 @@
 <body>
 
   <!-- Header -->
-   <header id="header">
-           <div class="container_header">
-             <div id="top_menu">
-                <ul>
-                    <li><a href="index.html">Miel</a></li>  
-                    <li><a href="propolis.html">Propolis</a></li>
-                    <li><a href="blog.html">Blog</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="contact.html">Contact</a></li>
+    <header id="header">
+        <div class="container_header">
+            <div id="top_menu">
+                <ul class="menu">
+                    <li><a href="index.php">Miel</a></li>
+                    <li><a href="blog.php">Blog</a></li>
+                    <li><a href="about.php">About</a></li>
+                    <li><a href="contact.php">Contact</a></li>
                 </ul>
+
             </div>
             <div class="logo">
-                <a href="index.html">
-                    <img src="images/logo.png" alt="logo"> 
+                <a href="index.php">
+                    <img src="images/logo.png" alt="logo">
+
                 </a>
             </div>
             <div class="header_droite">
-                <input type="text" placeholder="Rechercher...">
-                <a href="panier.html">Panier</a>
+                <ul>
+                    <li><input type="text" placeholder="Rechercher"></li>
+                    <li><a href="panier.php">Panier</a></li>
+                    <li><a href="nouveau.php">Nouveau client ?</a></li>
+                </ul>
             </div>
-           </div>
-        </header>
+        </div>
+    </header>
   <!-- Header -->
 
 

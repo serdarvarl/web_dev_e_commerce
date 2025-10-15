@@ -1,46 +1,39 @@
 <?php
-$host = '127.0.0.1';
-$port = '8889';   // MAMP MySQL port
-$db   = 'miel';   // 
-$user = 'root';
-$pass = 'root';
-
-$conn = new mysqli($host, $user, $pass, $db, $port);
-if ($conn->connect_error) {
-    die("connection errure: " . $conn->connect_error);
-}
+    require_once 'db.php'; // db.php, $conn oluşturur
+    $conn= getBD();
 
 $sql = "SELECT id_art, nom, quantite, prix, url_photo, description FROM Articles";
-
 $result = $conn->query($sql);
 
 
-$conn->close();
+// Sorguları kullandıktan sonra kapatabilirsin:
+$conn = null;
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
+
+
+
 <head>
     <meta charset="UTF-8">
     <title>Miel</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="test.css"> <!--unutma !!!! -->
 </head>
 
 <body>
-<!--php -->
 
 
-<!--php -->
+    <!-- Header -->
+
     <header id="header">
         <div class="container_header">
             <div id="top_menu">
-                <ul>
+                <ul class="menu">
                     <li><a href="index.php">Miel</a></li>
-                    <li><a href="blog.html">Blog</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                    <li><a href="nouveau.php">Nouveau client ?</a></li>
+                    <li><a href="blog.php">Blog</a></li>
+                    <li><a href="about.php">About</a></li>
+                    <li><a href="contact.php">Contact</a></li>
                 </ul>
 
             </div>
@@ -51,48 +44,47 @@ $conn->close();
                 </a>
             </div>
             <div class="header_droite">
-                <input type="text" placeholder="Rechercher...">
-                <a href="panier.html">Panier</a>
+                <ul>
+                    <li><input type="text" placeholder="Rechercher"></li>
+                    <li><a href="panier.php">Panier</a></li>
+                    <li><a href="nouveau.php">Nouveau client ?</a></li>
+                </ul>
             </div>
-
         </div>
     </header>
 
 
 
-
-<!--Dynamic Product List from Database -->
+    <!--Dynamic Product List from Database -->
     <div id="product-list-container">
-    <?php
-    if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-            echo '<div class="product-item">';
-            echo '<a href="article.php?id='.$row['id_art'].'">';
-            echo '<h2 class="product_name">'.htmlspecialchars($row['nom']).'</h2>';
-            echo '<img src="'.htmlspecialchars($row['url_photo']).'" alt="'.htmlspecialchars($row['nom']).'">';
-            echo '</a>';
-            echo '<p class="product_description">'.htmlspecialchars($row['description']).'</p>';
-            echo '<p class="product_price">Prix: '.htmlspecialchars($row['prix']).' €</p>';
-            echo '<button class="add-to-cart">Ajouter au panier</button>';
-            echo '</div>';
+        <?php
+        if ($result->rowCount() > 0) {
+            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                echo '<div class="product-item">';
+                echo '<a href="article.php?id=' . $row['id_art'] . '">';
+                echo '<h2 class="product_name">' . htmlspecialchars($row['nom']) . '</h2>';
+                echo '<img src="' . htmlspecialchars($row['url_photo']) . '" alt="' . htmlspecialchars($row['nom']) . '">';
+                echo '</a>';
+                echo '<p class="product_description">' . htmlspecialchars($row['description']) . '</p>';
+                echo '<p class="product_price">Prix: ' . htmlspecialchars($row['prix']) . ' €</p>';
+                echo '<button class="add-to-cart">Ajouter au panier</button>';
+                echo '</div>';
+            }
+        } else {
+            echo "<p>Aucun produit trouvé.</p>";
         }
-    } else {
-        echo "<p>Aucun produit trouvé.</p>";
-    }
-    ?>
-</div>
+        ?>
+    </div>
 
 
 
 
-
-
-    <!-- Footer  pas encore fini --> 
+    <!-- Footer  pas encore fini -->
     <div class="footer">
         <p>&copy; 2024 Miel. All rights reserved.</p>
         <div class="bottom_menu">
             <ul>
-                <li><a href="index.html">Miel</a></li> 
+                <li><a href="index.html">Miel</a></li>
                 <li>Propolis</li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
@@ -102,138 +94,6 @@ $conn->close();
         </div>
     </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--  Static Product List Example 
-    <div id="product-list-container">
-
-
-        <div class="product-item">
-            <a href="article_1.html">
-                <h2 class="product_name">Miel 1</h2>
-                <img src="images/img1.jpg" alt="Miel 1">
-            </a>
-            <p class="product_description">Description du miel 1</p>
-            <p class="product_price">Prix: 10€</p>
-            <button class="add-to-cart">Ajouter au panier</button>
-        </div>
-        <div class="product-item">
-            <a href="article_2.html">
-                <h2 class="product_name">Miel 2</h2>
-                <img src="images/img1.jpg" alt="Miel 1">
-            </a>
-            <p class="product_description">Description du miel 1</p>
-            <p class="product_price">Prix: 10€</p>
-            <button class="add-to-cart">Ajouter au panier</button>
-        </div>
-        <div class="product-item">
-            <a href="article_3.html">
-                <h2 class="product_name">Miel 3</h2>
-                <img src="images/img1.jpg" alt="Miel 1">
-            </a>
-            <p class="product_description">Description du miel 1</p>
-            <p class="product_price">Prix: 10€</p>
-            <button class="add-to-cart">Ajouter au panier</button>
-        </div>
-        <div class="product-item">
-            <a href="article_1.html">
-                <h2 class="product_name">Miel 1</h2>
-                <img src="images/img1.jpg" alt="Miel 1">
-            </a>
-            <p class="product_description">Description du miel 1</p>
-            <p class="product_price">Prix: 10€</p>
-            <button class="add-to-cart">Ajouter au panier</button>
-        </div>
-        <div class="product-item">
-            <a href="article_1.html">
-                <h2 class="product_name">Miel 1</h2>
-                <img src="images/img1.jpg" alt="Miel 1">
-            </a>
-            <p class="product_description">Description du miel 1</p>
-            <p class="product_price">Prix: 10€</p>
-            <button class="add-to-cart">Ajouter au panier</button>
-        </div>
-        <div class="product-item">
-            <a href="article_1.html">
-                <h2 class="product_name">Miel 1</h2>
-                <img src="images/img1.jpg" alt="Miel 1">
-            </a>
-            <p class="product_description">Description du miel 1</p>
-            <p class="product_price">Prix: 10€</p>
-            <button class="add-to-cart">Ajouter au panier</button>
-        </div>
-        <div class="product-item">
-            <a href="article_1.html">
-                <h2 class="product_name">Miel 1</h2>
-                <img src="images/img1.jpg" alt="Miel 1">
-            </a>
-            <p class="product_description">Description du miel 1</p>
-            <p class="product_price">Prix: 10€</p>
-            <button class="add-to-cart">Ajouter au panier</button>
-        </div>
-        <div class="product-item">
-            <a href="article_1.html">
-                <h2 class="product_name">Miel 1</h2>
-                <img src="images/img1.jpg" alt="Miel 1">
-            </a>
-            <p class="product_description">Description du miel 1</p>
-            <p class="product_price">Prix: 10€</p>
-            <button class="add-to-cart">Ajouter au panier</button>
-        </div>
-        <div class="product-item">
-            <a href="article_1.html">
-                <h2 class="product_name">Miel 1</h2>
-                <img src="images/img1.jpg" alt="Miel 1">
-            </a>
-            <p class="product_description">Description du miel 1</p>
-            <p class="product_price">Prix: 10€</p>
-            <button class="add-to-cart">Ajouter au panier</button>
-        </div>
-        <div class="product-item">
-            <a href="article_1.html">
-                <h2 class="product_name">Miel 1</h2>
-                <img src="images/img1.jpg" alt="Miel 1">
-            </a>
-            <p class="product_description">Description du miel 1</p>
-            <p class="product_price">Prix: 10€</p>
-            <button class="add-to-cart">Ajouter au panier</button>
-        </div>
-        <div class="product-item">
-            <a href="article_1.html">
-                <h2 class="product_name">Miel 1</h2>
-                <img src="images/img1.jpg" alt="Miel 1">
-            </a>
-            <p class="product_description">Description du miel 1</p>
-            <p class="product_price">Prix: 10€</p>
-            <button class="add-to-cart">Ajouter au panier</button>
-        </div>
-        <div class="product-item">
-            <a href="article_1.html">
-                <h2 class="product_name">Miel 1</h2>
-                <img src="images/img1.jpg" alt="Miel 1">
-            </a>
-            <p class="product_description">Description du miel 1</p>
-            <p class="product_price">Prix: 10€</p>
-            <button class="add-to-cart">Ajouter au panier</button>
-        </div>
-
-    </div>
- -->
-
-
-
-
-
 </body>
+
 </html>
