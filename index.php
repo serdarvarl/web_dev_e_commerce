@@ -6,7 +6,7 @@ $sql = "SELECT id_art, nom, quantite, prix, url_photo, description FROM Articles
 $result = $conn->query($sql);
 
 
-// Sorguları kullandıktan sonra kapatabilirsin:
+
 $conn = null;
 ?>
 

@@ -10,6 +10,10 @@ if ($conn->connect_error) {
     die("connection errorr: " . $conn->connect_error);
 }
 
+if (!empty($_GET['err'])): ?>
+  <p style="color:#b00;"><?= htmlspecialchars($_GET['err']) ?></p>
+<?php endif; ?>
+
 
 
 $conn->close();
@@ -66,6 +70,7 @@ $conn->close();
   <p>Veuillez remplir le formulaire ci-dessous pour créer un nouveau compte client.</p>
 
   <!-- Formulaire d'inscription -->
+ <!-- <form action="enregistrement.php" method="get"> -->
 
 <form action="enregistrement.php" method="post"> 
     <label>Nom :</label>
