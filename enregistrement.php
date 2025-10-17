@@ -15,8 +15,8 @@ $mail   = trim($_POST['mail']?? '');
 $mdp1   = $_POST['mdp1'] ?? '';
 $mdp2   = $_POST['mdp2'] ?? '';
 
-// 2) verifier les donnees
-$invalid = ($nom==='' || $prenom==='' || $adresse==='' || $numero==='' || $mail==='' || $mdp1==='' || $mdp2==='' || $mdp1!==$mdp2);
+// 2) verifier les donnees (conditions de validation)
+$invalid = ($nom==='' || $prenom==='' || $adresse==='' || $numero==='' || $mail==='' || $mdp1==='' || $mdp2==='' || $mdp1!==$mdp2); 
 
 if ($invalid) {
   // si il ya des erreurs revient a nouveau.phpppp
