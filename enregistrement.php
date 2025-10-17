@@ -1,12 +1,12 @@
 <?php
-// Hataları gör (geçici, geliştirme için)
+// pou voir des erreurs (temporaire, pour le developpement)
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once 'db.php'; // TP3'teki getBD() fonksiyonun.  
+require_once 'db.php'; // Tp3 getDB()
 
-// 1) POST verilerini al
+// 1) POST data 
 $nom    = trim($_POST['n']   ?? '');
 $prenom = trim($_POST['p']   ?? '');
 $adresse= trim($_POST['adr'] ?? '');
@@ -15,11 +15,11 @@ $mail   = trim($_POST['mail']?? '');
 $mdp1   = $_POST['mdp1'] ?? '';
 $mdp2   = $_POST['mdp2'] ?? '';
 
-// 2) Doğrulama
+// 2) verifier les donnees
 $invalid = ($nom==='' || $prenom==='' || $adresse==='' || $numero==='' || $mail==='' || $mdp1==='' || $mdp2==='' || $mdp1!==$mdp2);
 
 if ($invalid) {
-  // TP4 Ex.3–4: Hata → nouveau.php’ye geri dön (mdp’ler hariç alanları geri doldur)
+  // si il ya des erreurs revient a nouveau.phpppp
   $qs = http_build_query([
     'n'=>$nom, 'p'=>$prenom, 'adr'=>$adresse, 'num'=>$numero, 'mail'=>$mail,
     'err' => ($mdp1!==$mdp2 ? 'Les mots de passe ne correspondent pas' : 'Formulaire incomplet')
@@ -31,7 +31,7 @@ if ($invalid) {
 try {
   $pdo = getBD();
 
-  // (İsteğe bağlı) aynı e-mail var mı kontrolü
+  // verifier si mail deja exist
   $check = $pdo->prepare("SELECT COUNT(*) FROM Clients WHERE mail = :mail");
   $check->execute([':mail'=>$mail]);
   if ($check->fetchColumn() > 0) {
@@ -43,8 +43,8 @@ try {
     exit;
   }
 
-  // 3) INSERT (TP4 Ex.6: getBD() ile DB yaz)  
-  $hash = password_hash($mdp1, PASSWORD_BCRYPT);
+  // 3) Insert Password hash
+  $hash = password_hash($mdp1, PASSWORD_BCRYPT); // mdp hashing mais j'ai pas compris pq :/
 
   $sql = "INSERT INTO Clients (nom, prenom, adresse, numero, mail, mdp)
           VALUES (:nom, :prenom, :adresse, :numero, :mail, :mdp)";
@@ -58,11 +58,11 @@ try {
     ':mdp' => $hash
   ]);
 
-  // Başarılı → index.php
+  // si tout est ok, rediriger a la page d'accueil
   meta_redirect("index.php");
 
 } catch (PDOException $e) {
-  // UNIQUE ihlali vb. durumlar
+  // UNIQUE violation (mail deja utilise)
   $msg = ($e->getCode()==='23000')
     ? 'Cette adresse e-mail est déjà utilisée'
     : 'Erreur DB: '.$e->getMessage();
@@ -74,7 +74,7 @@ try {
   exit;
 }
 
-// TP4 Ex.3: head içinde META ile yönlendirme helper'ı  
+// TP4 Ex.3: head meta redirection function
 function meta_redirect(string $url) {
   echo '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">';
   echo '<meta http-equiv="refresh" content="0;url='.htmlspecialchars($url,ENT_QUOTES).'">';

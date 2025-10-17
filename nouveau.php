@@ -16,8 +16,10 @@ if (!empty($_GET['err'])): ?>
 
 
 
-$conn->close();
+<?php $conn->close();
 ?>
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>

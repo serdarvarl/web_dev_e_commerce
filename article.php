@@ -11,12 +11,12 @@ if ($conn->connect_error) {
 }
 
 // URL de id
-$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;   // filter_input()
+$id = isset($_GET['id_art']) ? (int)$_GET['id_art'] : 0;   // filter_input()
 
 
 
 // 
-$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT, ['options' => ['default' => 0, 'min_range' => 1]]);
+$id = filter_input(INPUT_GET, 'id_art', FILTER_VALIDATE_INT, ['options' => ['default' => 0, 'min_range' => 1]]);
 
 //
 
@@ -37,6 +37,8 @@ $conn->close();
 <body>
 
   <!-- Header -->
+    <!-- Header -->
+
     <header id="header">
         <div class="container_header">
             <div id="top_menu">

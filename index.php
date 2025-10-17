@@ -1,13 +1,12 @@
 <?php
-    require_once 'db.php'; // db.php, $conn oluşturur
-    $conn= getBD();
+session_start();
+require_once __DIR__ . '/db.php'; // yol güvenli
+$conn = getBD();
 
 $sql = "SELECT id_art, nom, quantite, prix, url_photo, description FROM Articles";
-$result = $conn->query($sql);
-
-
-
-$conn = null;
+$stmt = $conn->query($sql);
+$articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// $conn = null;  // BUNU en sona taşıyacağız
 ?>
 
 <!DOCTYPE html>
@@ -46,35 +45,67 @@ $conn = null;
             <div class="header_droite">
                 <ul>
                     <li><input type="text" placeholder="Rechercher"></li>
-                    <li><a href="panier.php">Panier</a></li>
-                    <li><a href="nouveau.php">Nouveau client ?</a></li>
+
+                    <?php if (!isset($_SESSION['client'])): ?>
+                        <li><a href="nouveau.php">Nouveau client ?</a></li>
+                        <li><a href="connexion.php">Se connecter</a></li>
+                    <?php else: ?>
+                        <li>
+                            Bonjour
+                            <?= htmlspecialchars($_SESSION['client']['prenom']) ?>
+                            <?= htmlspecialchars($_SESSION['client']['nom']) ?>
+                        </li>
+                        <li><a href="panier.php">Panier</a></li>
+                        <li><a href="deconnexion.php">Se déconnecter</a></li>
+                    <?php endif; ?>
                 </ul>
             </div>
-        </div>
     </header>
 
 
 
     <!--Dynamic Product List from Database -->
+    <!-- Dynamic Product List from Database -->
     <div id="product-list-container">
         <?php
-        if ($result->rowCount() > 0) {
+        // get depuis  data from database
+        $conn = getBD();
+        $sql = "SELECT id_art, nom, quantite, prix, url_photo, description FROM Articles";
+        $result = $conn->query($sql);
+
+        if ($result && $result->rowCount() > 0) {
             while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+
                 echo '<div class="product-item">';
-                echo '<a href="article.php?id=' . $row['id_art'] . '">';
+                echo '<a href="article.php?id_art=' . htmlspecialchars($row['id_art']) . '">';
                 echo '<h2 class="product_name">' . htmlspecialchars($row['nom']) . '</h2>';
                 echo '<img src="' . htmlspecialchars($row['url_photo']) . '" alt="' . htmlspecialchars($row['nom']) . '">';
                 echo '</a>';
                 echo '<p class="product_description">' . htmlspecialchars($row['description']) . '</p>';
                 echo '<p class="product_price">Prix: ' . htmlspecialchars($row['prix']) . ' €</p>';
-                echo '<button class="add-to-cart">Ajouter au panier</button>';
+
+                //si client connecte, afficher form ajouter au panier
+                if (isset($_SESSION['client'])) {
+                    echo '<form action="ajouter.php" method="post" style="margin-top:8px;">';
+                    echo '<input type="hidden" name="id_art" value="' . htmlspecialchars($row['id_art']) . '">';
+                    echo '<label>Quantité</label>';
+                    echo '<input type="number" name="quantite" min="1" value="1" required>';
+                    echo '<input type="submit" value="Ajouter à votre panier">';
+                    echo '</form>';
+                } else {
+                    echo '<p style="margin-top:8px;"><a href="connexion.php" class="add-to-cart">Se connecter pour ajouter au panier</a></p>';
+                }
+
                 echo '</div>';
             }
         } else {
             echo "<p>Aucun produit trouvé.</p>";
         }
+
+        $conn = null;
         ?>
     </div>
+
 
 
 
