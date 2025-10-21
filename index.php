@@ -13,6 +13,12 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html lang="fr">
 
 
+</script>
+
+
+</script>
+
+
 
 <head>
     <meta charset="UTF-8">
@@ -21,6 +27,9 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body>
+
+
+
 
 
     <!-- Header -->

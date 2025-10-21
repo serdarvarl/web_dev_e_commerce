@@ -21,7 +21,7 @@ if (!isset($_SESSION['panier']) || count($_SESSION['panier']) === 0) {
 // 3️⃣ predns detail de produits
 $pdo = getBD();
 
-// Panier içindeki tüm id_art değerlerini topla
+// somme des id_art prix
 $idList = array_column($_SESSION['panier'], 'id_art');
 $placeholders = implode(',', array_fill(0, count($idList), '?'));
 
