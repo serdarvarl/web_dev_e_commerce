@@ -39,7 +39,6 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div id="top_menu">
                 <ul class="menu">
                     <li><a href="index.php">Miel</a></li>
-                    <li><a href="blog.php">Blog</a></li>
                     <li><a href="about.php">About</a></li>
                     <li><a href="contact.php">Contact</a></li>
                 </ul>
