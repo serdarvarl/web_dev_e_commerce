@@ -50,17 +50,14 @@
 
   <!-- Footer -->
   <footer class="footer">
-    <p>&copy; 2024 Miel. All rights reserved.</p>
     <nav class="bottom_menu">
       <ul>
         <li><a href="index.html">Miel</a></li>
         <li><a href="propolis.html">Propolis</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="contact.html">Contact</a></li>
-        <li><a href="blog.html">Blog</a></li>
       </ul>
     </nav>
   </footer>
-
 </body>
 </html>
