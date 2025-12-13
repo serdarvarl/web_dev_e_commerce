@@ -11,7 +11,7 @@ if (!isset($_SESSION['client']) || !isset($_SESSION['panier']) || count($_SESSIO
 }
 
 // 1. Stripe test sk
-\Stripe\Stripe::setApiKey('***************************');
+\Stripe\Stripe::setApiKey('sk_test_51SQoxfD95YOAhUESBHuNKueEujx8JHvFmRKMdhQUk8oBLoEKByvPUEjKsHgduoCMlKVK2My9lGaHEBrxB1XlIcAU00V3rkj9kT');
 
 // 2. je calcule somme de panier pour ça recuperer les prix sur db
 $pdo = getBD();
@@ -48,7 +48,7 @@ try {
         'line_items' => $line_items,
         'mode' => 'payment',
         'success_url' => 'http://localhost:8888/VAROL/web_dev_e_commerce/success.php',
-'cancel_url' => 'http://localhost:8888/VAROL/web_dev_e_commerce/commande.php',
+        'cancel_url' => 'http://localhost:8888/VAROL/web_dev_e_commerce/commande.php',
     ]);
 
     // directionnn stripeee

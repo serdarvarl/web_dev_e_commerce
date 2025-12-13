@@ -49,7 +49,7 @@
 
         <br>
         <button type="submit" id="btnSubmit" disabled style="opacity: 0.5;">S’inscrire</button>
-        <span id="loading">İşleniyor...</span>
+        <span id="loading">Traitement en cours...</span>
     </form>
 </div>
 

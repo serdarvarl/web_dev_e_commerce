@@ -15,4 +15,4 @@ function getBD() {
         die("Erreur de connexion : " . $e->getMessage());
     }
 }
-?>
+
