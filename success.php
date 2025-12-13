@@ -2,7 +2,7 @@
 session_start();
 require_once 'db.php';
 
-// Güvenlik: Sepet boşsa veya müşteri yoksa anasayfaya at
+//si paneier est vide ou le client n'est pa la redirection a main page
 if (!isset($_SESSION['client']) || !isset($_SESSION['panier']) || count($_SESSION['panier']) === 0) {
     header('Location: index.php');
     exit;
@@ -12,14 +12,14 @@ $pdo = getBD();
 $id_client = $_SESSION['client']['id_client'];
 
 try {
-    // Transaction başlat (Tüm işlemler ya hep yapılır ya hiç yapılmaz)
+    //start or rest
     $pdo->beginTransaction();
 
     foreach ($_SESSION['panier'] as $item) {
         $id_art = $item['id_art'];
         $quantite = $item['quantite'];
 
-        // 1. Siparişi Kaydet
+        //resgiter commande
         $sqlInsert = "INSERT INTO Commandes (id_art, id_client, quantite, envoi) VALUES (:id_art, :id_client, :quantite, 0)";
         $stmtInsert = $pdo->prepare($sqlInsert);
         $stmtInsert->execute([
@@ -28,7 +28,7 @@ try {
             ':quantite' => $quantite
         ]);
 
-        // 2. Stoktan Düş
+        // dimunier dans stock
         $sqlUpdate = "UPDATE Articles SET quantite = quantite - :quantite WHERE id_art = :id_art";
         $stmtUpdate = $pdo->prepare($sqlUpdate);
         $stmtUpdate->execute([
@@ -37,10 +37,10 @@ try {
         ]);
     }
 
-    // İşlemleri onayla
+    // apreove 
     $pdo->commit();
 
-    // 3. Sepeti Boşalt (TP 6 - Egzersiz 3)
+    //videee le panier
     unset($_SESSION['panier']);
 
 } catch (Exception $e) {

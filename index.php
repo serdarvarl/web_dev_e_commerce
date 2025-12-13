@@ -19,6 +19,91 @@ try {
     <meta charset="UTF-8">
     <title>Miel - Accueil</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+           #chat-box {
+        position: fixed;
+        bottom: 0;
+        right: 20px;
+        width: 320px;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 10px 10px 0 0;
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        z-index: 9999;
+        font-family: Arial, sans-serif;
+    }
+
+    
+    #chat-header {
+        background: #FFC107; /* Bal rengi */
+        color: #333;
+        padding: 12px;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 10px 10px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    
+    #chat-content {
+        height: 300px;
+        overflow-y: auto;
+        padding: 15px;
+        background: #f9f9f9;
+        display: none; 
+        border-bottom: 1px solid #eee;
+    }
+
+    
+    #chat-form {
+        display: none;
+        padding: 10px;
+        background: #fff;
+    }
+
+    #chat-input {
+        width: 70%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        outline: none;
+    }
+
+    #chat-btn {
+        width: 25%;
+        padding: 8px;
+        background: #333;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9em;
+    }
+
+    /* Tekil Mesaj Stili */
+    .msg-item {
+        margin-bottom: 10px;
+        font-size: 0.9em;
+        line-height: 1.4;
+    }
+    .msg-user {
+        font-weight: bold;
+        color: #d35400;
+    }
+    .msg-text {
+        color: #555;
+    }
+    .msg-time {
+        font-size: 0.7em;
+        color: #999;
+        float: right;
+    }
+   
+    </style>
+
 </head>
 <body>
 
@@ -81,6 +166,94 @@ try {
     <footer class="footer">
         <p>&copy; 2024 Miel. All rights reserved.</p>
     </footer>
+<div id="chat-box">
+    <div id="chat-header">
+        <span>💬 Discussion en direct</span>
+        <span id="toggle-icon">▲</span>
+    </div>
+    
+    <div id="chat-content">
+        <p style="text-align:center; color:gray;">Chargement...</p>
+    </div>
 
+    <div id="chat-form">
+        <input type="text" id="chat-input" placeholder="Votre message..." maxlength="256">
+        <button id="chat-btn">Envoyer</button>
+    </div>
+</div>
+
+
+<script>
+$(document).ready(function() {
+    var chatOpen = false;
+    var intervalId = null;
+
+    // toogle open ferme
+    $('#chat-header').click(function() {
+        $('#chat-content, #chat-form').slideToggle();
+        chatOpen = !chatOpen;
+        $('#toggle-icon').text(chatOpen ? '▼' : '▲');
+        
+        if (chatOpen) {
+            loadMessages();
+            intervalId = setInterval(loadMessages, 3000);
+        } else {
+            clearInterval(intervalId);
+        }
+    });
+
+    // msg televerse 
+    function loadMessages() {
+        $.ajax({
+            url: 'chat_api.php',
+            type: 'GET',
+            data: { action: 'load' },
+            dataType: 'json',
+            success: function(messages) {
+                var html = '';
+                if (messages.length === 0) {
+                    html = '<p style="text-align:center; color:#999;">Aucun message récent.</p>';
+                } else {
+                    $.each(messages, function(index, msg) {
+                        var user = $('<div>').text(msg.nom_user).html();
+                        var text = $('<div>').text(msg.message).html();
+                        
+                        html += '<div class="msg-item">';
+                        html += '<span class="msg-user">' + user + '</span> dit : ';
+                        html += '<span class="msg-text">"' + text + '"</span>';
+                        html += '</div>';
+                    });
+                }
+                $('#chat-content').html(html);
+                var div = $('#chat-content');
+                div.scrollTop(div.prop("scrollHeight"));
+            }
+        });
+    }
+
+    // envoyer msg
+    $('#chat-btn').click(sendMessage);
+    $('#chat-input').keypress(function(e) {
+        if(e.which == 13) sendMessage();
+    });
+
+    function sendMessage() {
+        var txt = $('#chat-input').val().trim();
+        if (txt === '') return;
+
+        $.post('chat_api.php', { action: 'send', message: txt }, function(response) {
+            if (response.status === 'success') {
+                $('#chat-input').val('');
+                loadMessages();
+            } else {
+                
+                alert("Erreur: " + (response.msg || response.message || "Erreur inconnue"));
+            }
+        }, 'json');
+    }
+});
+</script>
 </body>
 </html>
+
+

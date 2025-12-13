@@ -33,7 +33,7 @@ foreach ($_SESSION['panier'] as $item) {
                     'product_data' => [
                         'name' => $p['nom'],
                     ],
-                    'unit_amount' => $p['prix'] * 100, // Stripe kuruş cinsinden çalışır (10€ = 1000 cent)
+                    'unit_amount' => $p['prix'] * 100, // calculer les cent pour stripe
                 ],
                 'quantity' => $item['quantite'],
             ];

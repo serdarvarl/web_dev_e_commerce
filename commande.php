@@ -2,13 +2,13 @@
 session_start();
 require_once __DIR__ . '/db.php';
 
-// 1. Güvenlik Kontrolü: Kullanıcı giriş yapmış mı?
+// check client se connecter
 if (!isset($_SESSION['client'])) {
     header('Location: connexion.php?err=Veuillez vous connecter pour passer commande');
     exit;
 }
 
-// 2. Sepet Kontrolü: Sepet boş mu?
+// check panier est vide ???
 if (!isset($_SESSION['panier']) || count($_SESSION['panier']) === 0) {
     header('Location: index.php?err=Votre panier est vide');
     exit;
@@ -16,8 +16,8 @@ if (!isset($_SESSION['panier']) || count($_SESSION['panier']) === 0) {
 
 $pdo = getBD();
 
-// 3. Kullanıcı Bilgilerini (Adres vb.) Çekme [cite: 37]
-// Session'daki ID'yi kullanarak veritabanından güncel adresi alıyoruz.
+// prender les data de client adress etc
+// utiliser id dans la sssion 
 $id_client = $_SESSION['client']['id_client'];
 $sqlClient = "SELECT nom, prenom, adresse, numero, mail FROM Clients WHERE id_client = :id";
 $stmtClient = $pdo->prepare($sqlClient);
@@ -28,7 +28,7 @@ if (!$clientInfo) {
     die("Erreur : Impossible de récupérer les informations du client.");
 }
 
-// 4. Sepetteki Ürünleri ve Toplam Tutarı Hesaplama [cite: 210, 211]
+// calcule panier encore ID article
 $idList = array_column($_SESSION['panier'], 'id_art');
 $placeholders = implode(',', array_fill(0, count($idList), '?'));
 
@@ -37,7 +37,7 @@ $stmtPanier = $pdo->prepare($sqlPanier);
 $stmtPanier->execute($idList);
 $articlesDB = $stmtPanier->fetchAll(PDO::FETCH_ASSOC);
 
-// Ürünleri ID'ye göre dizine aktar (kolay erişim için)
+// trie le list selon id creee new list
 $produits = [];
 foreach ($articlesDB as $p) {
     $produits[$p['id_art']] = $p;
@@ -99,7 +99,7 @@ $totalCommande = 0;
         </tr>
         <?php foreach ($_SESSION['panier'] as $item): 
             $id = $item['id_art'];
-            if (!isset($produits[$id])) continue; // Ürün silinmişse atla
+            if (!isset($produits[$id])) continue; // si  le prodct suprimee
 
             $nom = $produits[$id]['nom'];
             $prix = $produits[$id]['prix'];

@@ -17,7 +17,7 @@ try {
         exit;
     }
 
-    // Email kontrolü (Çift dikiş güvenlik)
+    //double verifier pour mail
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM Clients WHERE mail = :mail");
     $stmt->execute([':mail' => $mail]);
     if ($stmt->fetchColumn() > 0) {
@@ -25,7 +25,7 @@ try {
         exit;
     }
 
-    // Kayıt İşlemi
+    // registerrr
     $hash = password_hash($mdp, PASSWORD_BCRYPT);
     $sql = "INSERT INTO Clients (nom, prenom, adresse, numero, mail, mdp) 
             VALUES (:n, :p, :adr, :num, :mail, :mdp)";
