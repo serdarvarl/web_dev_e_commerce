@@ -1,31 +1,18 @@
 <?php
-$host = '127.0.0.1';
-$port = '8889';   // MAMP port
-$db   = 'miel';
-$user = 'root';
-$pass = 'root';
+//appel de bd
+require_once 'db.php';
 
-$conn = new mysqli($host, $user, $pass, $db, $port);
-if ($conn->connect_error) {
-    die("connection errorr: " . $conn->connect_error);
-}
-
-// URL de id
-$id = isset($_GET['id_art']) ? (int)$_GET['id_art'] : 0;   // filter_input()
-
-
-
-// 
+// url Id plus secu
 $id = filter_input(INPUT_GET, 'id_art', FILTER_VALIDATE_INT, ['options' => ['default' => 0, 'min_range' => 1]]);
 
-//
+//  connection 
+$pdo = getBD();
 
-// de base de données
-$sql = "SELECT * FROM Articles WHERE id_art = $id LIMIT 1";//prepared statement 
-$result = $conn->query($sql);
-$product = ($result && $result->num_rows > 0) ? $result->fetch_assoc() : null;
-
-$conn->close();
+//prendre de produit avec statemet
+$sql = "SELECT * FROM Articles WHERE id_art = :id";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([':id' => $id]);
+$product = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -78,7 +65,15 @@ $conn->close();
       <p class="product_description"><?php echo htmlspecialchars($product['description']); ?></p>
       <p class="product_price">Prix: <?php echo htmlspecialchars($product['prix']); ?> €</p>
       <p><strong>Stock:</strong> <?php echo htmlspecialchars($product['quantite']); ?></p>
-      <button class="add-to-cart">Ajouter au panier</button>
+      <!--update button ajouter -->
+      <form action="ajouter.php" method="post"> 
+    <input type="hidden" name="id_art" value="<?php echo $product['id_art']; ?>">
+
+    <label for="qte">Quantité :</label>
+    <input type="number" id="qte" name="quantite" value="1" min="1" style="width: 50px;">
+
+    <button type="submit" class="add-to-cart">Ajouter au panier</button>
+</form>
     </div>
     <div class="description">
       <p class="product_description"><?php echo htmlspecialchars($product['description']); ?></p>
@@ -96,7 +91,7 @@ $conn->close();
 
   <!-- Footer -->
   <footer class="footer">
-    <p>&copy; 2024 Miel. All rights reserved.</p>
+    
     <nav class="bottom_menu">
       <ul>
         <li><a href="index.php">Miel</a></li>
@@ -110,3 +105,4 @@ $conn->close();
 
 </body>
 </html>
+

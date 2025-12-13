@@ -8,7 +8,7 @@ if (!isset($_SESSION['client'])) {
     exit;
 }
 
-// 2️⃣ verifierr si panier vide
+// 2️ verifierr si panier vide
 if (!isset($_SESSION['panier']) || count($_SESSION['panier']) === 0) {
     echo '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>Panier vide</title>';
     echo '<link rel="stylesheet" href="styles.css"></head><body>';
@@ -18,7 +18,7 @@ if (!isset($_SESSION['panier']) || count($_SESSION['panier']) === 0) {
     exit;
 }
 
-// 3️⃣ predns detail de produits
+// predns detail de produits
 $pdo = getBD();
 
 // somme des id_art prix
@@ -81,10 +81,15 @@ $total = 0;
     <td><?= number_format($total, 2, ',', ' ') ?> €</td>
   </tr>
 </table>
-
-<p style="text-align:center; margin-top:20px;">
-  <a href="index.php">← Retour à la boutique</a>
-</p>
+<div style="text-align:center; margin-top:20px;">
+    <a href="index.php" style="margin-right: 20px; text-decoration: none; font-size: 18px;">← Retour à la boutique</a>
+    
+    <?php if (count($_SESSION['panier']) > 0): ?>
+        <a href="commande.php" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; font-size: 18px; border-radius: 5px;">
+            Passer la commande →
+        </a>
+    <?php endif; ?>
+</div>
 
 </body>
 </html>
