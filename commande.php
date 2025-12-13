@@ -2,13 +2,13 @@
 session_start();
 require_once __DIR__ . '/db.php';
 
-// check client se connecter
+// 1. Güvenlik Kontrolü: Kullanıcı giriş yapmış mı?
 if (!isset($_SESSION['client'])) {
     header('Location: connexion.php?err=Veuillez vous connecter pour passer commande');
     exit;
 }
 
-// check panier si est vide
+// 2. Sepet Kontrolü: Sepet boş mu?
 if (!isset($_SESSION['panier']) || count($_SESSION['panier']) === 0) {
     header('Location: index.php?err=Votre panier est vide');
     exit;
@@ -16,8 +16,8 @@ if (!isset($_SESSION['panier']) || count($_SESSION['panier']) === 0) {
 
 $pdo = getBD();
 
-// prendre les info client
-//id session pour adress
+// 3. Kullanıcı Bilgilerini (Adres vb.) Çekme [cite: 37]
+// Session'daki ID'yi kullanarak veritabanından güncel adresi alıyoruz.
 $id_client = $_SESSION['client']['id_client'];
 $sqlClient = "SELECT nom, prenom, adresse, numero, mail FROM Clients WHERE id_client = :id";
 $stmtClient = $pdo->prepare($sqlClient);
@@ -28,7 +28,7 @@ if (!$clientInfo) {
     die("Erreur : Impossible de récupérer les informations du client.");
 }
 
-// calcule panier avec id article
+// 4. Sepetteki Ürünleri ve Toplam Tutarı Hesaplama [cite: 210, 211]
 $idList = array_column($_SESSION['panier'], 'id_art');
 $placeholders = implode(',', array_fill(0, count($idList), '?'));
 
@@ -37,7 +37,7 @@ $stmtPanier = $pdo->prepare($sqlPanier);
 $stmtPanier->execute($idList);
 $articlesDB = $stmtPanier->fetchAll(PDO::FETCH_ASSOC);
 
-//create list selon id facilitee
+// Ürünleri ID'ye göre dizine aktar (kolay erişim için)
 $produits = [];
 foreach ($articlesDB as $p) {
     $produits[$p['id_art']] = $p;
@@ -82,10 +82,11 @@ $totalCommande = 0;
 
     <div class="address-box">
         <h3>Adresse de livraison :</h3>
-        <p><strong><?= htmlspecialchars($clientInfo['prenom'] . ' ' . $clientInfo['nom']) ?></strong></p>
-        <p><?= htmlspecialchars($clientInfo['adresse']) ?> </p>
+        [cite_start]<p><strong><?= htmlspecialchars($clientInfo['prenom'] . ' ' . $clientInfo['nom']) ?></strong> [cite: 213]</p>
+        [cite_start]<p><?= htmlspecialchars($clientInfo['adresse']) ?> [cite: 214]</p>
         <p>Tél : <?= htmlspecialchars($clientInfo['numero']) ?></p>
         <p>Email : <?= htmlspecialchars($clientInfo['mail']) ?></p>
+        <small><a href="#">Modifier mon adresse (Profil)</a></small>
     </div>
 
     <h3>Articles :</h3>
@@ -98,7 +99,7 @@ $totalCommande = 0;
         </tr>
         <?php foreach ($_SESSION['panier'] as $item): 
             $id = $item['id_art'];
-            if (!isset($produits[$id])) continue; //si la produit suprime
+            if (!isset($produits[$id])) continue; // Ürün silinmişse atla
 
             $nom = $produits[$id]['nom'];
             $prix = $produits[$id]['prix'];
@@ -116,7 +117,7 @@ $totalCommande = 0;
     </table>
 
     <div class="total-box">
-        Montant Total à Payer : <?= number_format($totalCommande, 2) ?> € 
+        [cite_start]Montant Total à Payer : <?= number_format($totalCommande, 2) ?> € [cite: 211]
     </div>
 
     <div style="text-align: center; margin-top: 30px;">
