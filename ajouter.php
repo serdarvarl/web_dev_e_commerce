@@ -1,13 +1,13 @@
 <?php
 session_start();
 
-// Müşteri giriş yapmış mı?
+// check se connecter
 if (!isset($_SESSION['client'])) {
   header('Location: connexion.php?err=Veuillez vous connecter pour ajouter au panier');
   exit;
 }
 
-// Verileri al ve temizle
+// nettoyage
 $id_art  = filter_input(INPUT_POST, 'id_art', FILTER_VALIDATE_INT, [
   'options' => ['default' => 0, 'min_range' => 1]
 ]);
@@ -21,17 +21,17 @@ if ($id_art <= 0 || $quantite <= 0) {
 }
 
 // ============================================================
-// YENİ EKLENEN KISIM: STOK KONTROLÜ (Maksimum Stok Senaryosu)
+// stock contorl
 // ============================================================
-require_once 'db.php'; // Veritabanı bağlantısı şart
+require_once 'db.php'; //concnetion db
 $pdo = getBD();
 
-// 1. Bu ürünün veritabanındaki güncel stoğunu çek
+//dernier stock
 $stmt = $pdo->prepare("SELECT quantite FROM Articles WHERE id_art = ?");
 $stmt->execute([$id_art]);
-$stockDispo = (int)$stmt->fetchColumn(); // Örneğin: 10
+$stockDispo = (int)$stmt->fetchColumn(); //num
 
-// 2. Kullanıcının sepetinde bu üründen zaten var mı?
+// si le client deja ajouterr
 $sepetMiktari = 0;
 if (isset($_SESSION['panier']) && is_array($_SESSION['panier'])) {
     foreach ($_SESSION['panier'] as $item) {
@@ -42,20 +42,18 @@ if (isset($_SESSION['panier']) && is_array($_SESSION['panier'])) {
     }
 }
 
-// 3. Kritik Karar: İstenen + Sepetteki > Stok mu?
+// panier + demander > stock
 if (($quantite + $sepetMiktari) > $stockDispo) {
-    // Stok yetersiz! Kullanıcıyı geri gönder ve uyar.
+    // insuffisant stock
     $back = 'article.php?id_art=' . $id_art;
-    // Hata mesajı: Stok yetersiz (Maks: 10)
+    // ererur msg qntt stock
     header('Location: ' . $back . '&err=Stock insuffisant (Max: ' . $stockDispo . ')');
     exit;
 }
 // ============================================================
-// STOK KONTROLÜ BİTİŞ
-// ============================================================
 
 
-// Sepet Session İşlemleri (Senin Orijinal Kodun)
+//panier session
 if (!isset($_SESSION['panier']) || !is_array($_SESSION['panier'])) {
   $_SESSION['panier'] = []; 
 }
@@ -77,7 +75,7 @@ if (!$found) {
   ];
 }
 
-// Başarılı ise geri dön
+//reusir comme back
 $back = 'article.php?id_art=' . urlencode($id_art);
 header('Location: ' . $back . '&ok=ajoute');
 exit;
