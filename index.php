@@ -2,6 +2,11 @@
 session_start();
 require_once __DIR__ . '/db.php'; // connection db
 
+///token contre attact
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 try {
     $pdo = getBD();
     //une seul fois prendre les artice
@@ -160,7 +165,15 @@ $(document).ready(function() {
         var txt = $('#chat-input').val().trim();
         if (txt === '') return;
 
-        $.post('chat_api.php', { action: 'send', message: txt }, function(response) {
+
+        //token de php a js
+        var csrfToken = "<?php echo $_SESSION['csrf_token']; ?>";
+
+        $.post('chat_api.php', 
+                { action: 'send', 
+                message: txt ,
+                csrf_token: csrfToken  // securiyt key 
+        }, function(response) {
             if (response.status === 'success') {
                 $('#chat-input').val('');
                 loadMessages();

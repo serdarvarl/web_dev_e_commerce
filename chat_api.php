@@ -48,7 +48,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'send') {
         if ($totalScore < -0.01) {
             echo json_encode([
                 'status' => 'error', 
-                'msg' => '⚠️ Message bloqué : Contenu inapproprié détecté ! (AI Score: ' . number_format($totalScore, 4) . ')'
+                'message' => '⚠️ Message bloqué : Contenu inapproprié détecté ! (AI Score: ' . number_format($totalScore, 4) . ')'
             ]);
             exit;
         }
