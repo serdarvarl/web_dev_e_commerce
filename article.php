@@ -70,7 +70,8 @@ $product = $stmt->fetch(PDO::FETCH_ASSOC);
     <input type="hidden" name="id_art" value="<?php echo $product['id_art']; ?>">
 
     <label for="qte">Quantité :</label>
-    <input type="number" id="qte" name="quantite" value="1" min="1" style="width: 50px;">
+    
+    <input type="number" id="qte" name="quantite" value="1" min="1" max="<?php echo $product['quantite']; ?>" style="width: 50px;"> <!--verifier quntite-->
 
     <button type="submit" class="add-to-cart">Ajouter au panier</button>
 </form>
@@ -80,6 +81,17 @@ $product = $stmt->fetch(PDO::FETCH_ASSOC);
     </div>
   </div>
   <?php else: ?>
+    <?php if (!empty($_GET['err'])): ?>
+    <p style="color:red; text-align:center; font-weight:bold;">
+        <?php echo htmlspecialchars($_GET['err']); ?>
+    </p>
+<?php endif; ?>
+
+<?php if (!empty($_GET['ok'])): ?>
+    <p style="color:green; text-align:center; font-weight:bold;">
+       Produit ajouté au panier !
+    </p>
+<?php endif; ?>
   <div class="product_page">
     <p>Produit introuvable.</p>
   </div>

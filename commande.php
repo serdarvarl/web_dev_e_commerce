@@ -82,11 +82,10 @@ $totalCommande = 0;
 
     <div class="address-box">
         <h3>Adresse de livraison :</h3>
-        [cite_start]<p><strong><?= htmlspecialchars($clientInfo['prenom'] . ' ' . $clientInfo['nom']) ?></strong> [cite: 213]</p>
-        [cite_start]<p><?= htmlspecialchars($clientInfo['adresse']) ?> [cite: 214]</p>
+        <p><strong><?= htmlspecialchars($clientInfo['prenom'] . ' ' . $clientInfo['nom']) ?></strong></p>
+        <p><?= htmlspecialchars($clientInfo['adresse']) ?> </p>
         <p>Tél : <?= htmlspecialchars($clientInfo['numero']) ?></p>
         <p>Email : <?= htmlspecialchars($clientInfo['mail']) ?></p>
-        <small><a href="#">Modifier mon adresse (Profil)</a></small>
     </div>
 
     <h3>Articles :</h3>
@@ -117,7 +116,7 @@ $totalCommande = 0;
     </table>
 
     <div class="total-box">
-        [cite_start]Montant Total à Payer : <?= number_format($totalCommande, 2) ?> € [cite: 211]
+        Montant Total à Payer : <?= number_format($totalCommande, 2) ?> € 
     </div>
 
     <div style="text-align: center; margin-top: 30px;">

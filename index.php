@@ -20,89 +20,7 @@ try {
     <title>Miel - Accueil</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-           #chat-box {
-        position: fixed;
-        bottom: 0;
-        right: 20px;
-        width: 320px;
-        background: #fff;
-        border: 1px solid #ccc;
-        border-radius: 10px 10px 0 0;
-        box-shadow: 0 0 15px rgba(0,0,0,0.2);
-        z-index: 9999;
-        font-family: Arial, sans-serif;
-    }
-
     
-    #chat-header {
-        background: #FFC107; /* Bal rengi */
-        color: #333;
-        padding: 12px;
-        font-weight: bold;
-        cursor: pointer;
-        border-radius: 10px 10px 0 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    
-    #chat-content {
-        height: 300px;
-        overflow-y: auto;
-        padding: 15px;
-        background: #f9f9f9;
-        display: none; 
-        border-bottom: 1px solid #eee;
-    }
-
-    
-    #chat-form {
-        display: none;
-        padding: 10px;
-        background: #fff;
-    }
-
-    #chat-input {
-        width: 70%;
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        outline: none;
-    }
-
-    #chat-btn {
-        width: 25%;
-        padding: 8px;
-        background: #333;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 0.9em;
-    }
-
-    /* Tekil Mesaj Stili */
-    .msg-item {
-        margin-bottom: 10px;
-        font-size: 0.9em;
-        line-height: 1.4;
-    }
-    .msg-user {
-        font-weight: bold;
-        color: #d35400;
-    }
-    .msg-text {
-        color: #555;
-    }
-    .msg-time {
-        font-size: 0.7em;
-        color: #999;
-        float: right;
-    }
-   
-    </style>
 
 </head>
 <body>
@@ -129,6 +47,7 @@ try {
                         <li>Bonjour, <?= htmlspecialchars($_SESSION['client']['prenom']) ?></li>
                         <li><a href="panier.php">Panier</a></li>
                         <li><a href="deconnexion.php">Se déconnecter</a></li>
+                        <li><a href="historique.php">Mes Commandes</a></li>
                     <?php endif; ?>
                 </ul>
             </div>

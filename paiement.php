@@ -55,5 +55,5 @@ try {
     header("Location: " . $checkout_session->url);
 } catch (Error $e) {
     http_response_code(500);
-    echo "Hata: " . $e->getMessage();
+    echo "Erreur: " . $e->getMessage(); #corriger lang 
 }
