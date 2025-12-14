@@ -11,7 +11,7 @@ if (!isset($_SESSION['client']) || !isset($_SESSION['panier']) || count($_SESSIO
 }
 
 // 1. Stripe test sk
-\Stripe\Stripe::setApiKey('**************');
+\Stripe\Stripe::setApiKey('************');
 
 // 2. je calcule somme de panier pour ça recuperer les prix sur db
 $pdo = getBD();

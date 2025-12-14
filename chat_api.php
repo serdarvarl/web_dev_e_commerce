@@ -7,11 +7,23 @@ $pdo = getBD();
 
 // envoyer msg
 if (isset($_POST['action']) && $_POST['action'] == 'send') {
+
+
+   if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+       echo json_encode(['status'=>'error', 'message'=>'CSRF Attack Detected! (Attaque a été déjouée)']);
+        exit;
+    }
+
+
+
     // chehck se connecter
     if (!isset($_SESSION['client'])) { 
         echo json_encode(['status'=>'error', 'msg'=>'Veuillez vous connecter.']); 
         exit; 
     }
+
+
+
     
     $msg = trim($_POST['message'] ?? '');
     $user = $_SESSION['client']['prenom'];
