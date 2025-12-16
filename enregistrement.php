@@ -44,7 +44,7 @@ try {
   }
 
   // 3) Insert Password hash
-  $hash = password_hash($mdp1, PASSWORD_BCRYPT); // mdp hashing mais j'ai pas compris pq :/
+  $hash = password_hash($mdp1, PASSWORD_BCRYPT); // mdp hashing mais j'ai pas compris pq :/ ok compris pasword_hash() 
 
   $sql = "INSERT INTO Clients (nom, prenom, adresse, numero, mail, mdp)
           VALUES (:nom, :prenom, :adresse, :numero, :mail, :mdp)";
