@@ -13,7 +13,7 @@ $id_client = $_SESSION['client']['id_client'];
 
 try {
     //start or rest
-    $pdo->beginTransaction();
+    $pdo->beginTransaction(); # si y a coupeur ssi.   // pense utiliser webhook stripr -> website -> stripe 
 
     foreach ($_SESSION['panier'] as $item) {
         $id_art = $item['id_art'];
@@ -45,7 +45,7 @@ try {
 
 } catch (Exception $e) {
     $pdo->rollBack();
-    die("Bir hata oluştu: " . $e->getMessage());
+    die("Il y a un erreur: " . $e->getMessage());
 }
 ?>
 

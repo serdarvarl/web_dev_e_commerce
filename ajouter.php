@@ -32,18 +32,18 @@ $stmt->execute([$id_art]);
 $stockDispo = (int)$stmt->fetchColumn(); //num
 
 // si le client deja ajouterr
-$sepetMiktari = 0;
+$panierTotal = 0; # changemen nom de variable sepetmiktari -> panierTotal
 if (isset($_SESSION['panier']) && is_array($_SESSION['panier'])) {
     foreach ($_SESSION['panier'] as $item) {
         if ((int)$item['id_art'] === $id_art) {
-            $sepetMiktari = (int)$item['quantite'];
+            $panierTotal = (int)$item['quantite'];
             break;
         }
     }
 }
 
 // panier + demander > stock
-if (($quantite + $sepetMiktari) > $stockDispo) {
+if (($quantite + $panierTotal) > $stockDispo) {
     // insuffisant stock
     $back = 'article.php?id_art=' . $id_art;
     // ererur msg qntt stock
@@ -79,4 +79,4 @@ if (!$found) {
 $back = 'article.php?id_art=' . urlencode($id_art);
 header('Location: ' . $back . '&ok=ajoute');
 exit;
-?>
+?>q

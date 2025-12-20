@@ -26,6 +26,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'send') {
 
     
     $msg = trim($_POST['message'] ?? '');
+    $msg =  string:($_POST['message'])
     $user = $_SESSION['client']['prenom'];
 
     // taille carancter
